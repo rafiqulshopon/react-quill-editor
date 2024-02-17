@@ -2,20 +2,14 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import 'react-quill/dist/quill.snow.css';
 
 const loadReactQuill = async () => {
   const { default: RQ } = await import('react-quill');
-
-  if (RQ) {
-    await import('quill-mention');
-  }
-
   const reactQuillWithRef = ({ forwardedRef, ...props }) => (
     <RQ ref={forwardedRef} {...props} />
   );
-
   return reactQuillWithRef;
 };
 
@@ -25,22 +19,93 @@ const ReactQuill = dynamic(loadReactQuill, {
 
 const AppEditor = ({
   readOnly = false,
-  onChange = () => {},
+  onChange,
   value = '',
   placeholder = '',
   toolbarBottom = false,
 }) => {
   const editorRef = useRef(null);
+  const quillContainerRef = useRef(null);
+  const [showMentionList, setShowMentionList] = useState(false);
+  const [mentionListPosition, setMentionListPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+  const [filteredMentions, setFilteredMentions] = useState([]);
+  const [cursorIndex, setCursorIndex] = useState(0);
 
-  const atValues = [
+  const mentions = [
     { id: 1, value: 'Calvin' },
     { id: 2, value: 'Samiul' },
     { id: 3, value: 'Riaz' },
   ];
 
-  const handleContentChange = (item) => {
-    onChange(item);
+  const handleContentChange = (content, delta, source, editor) => {
+    if (source === 'user') {
+      const cursorPosition = editor.getSelection()?.index;
+      if (cursorPosition) {
+        const textBeforeCursor = editor.getText(0, cursorPosition);
+        const atIndex = textBeforeCursor.lastIndexOf('@');
+
+        if (atIndex > -1) {
+          const wordEnd = textBeforeCursor.length;
+          const searchTerm = textBeforeCursor.substring(atIndex + 1, wordEnd);
+
+          const newFilteredMentions = mentions.filter((m) =>
+            m.value.toLowerCase().startsWith(searchTerm.toLowerCase())
+          );
+          setFilteredMentions(newFilteredMentions);
+
+          setShowMentionList(newFilteredMentions.length > 0);
+          const bounds = editor.getBounds(cursorPosition);
+          setMentionListPosition({ top: bounds.bottom, left: bounds.left });
+          setCursorIndex(cursorPosition);
+        } else {
+          setShowMentionList(false);
+        }
+      }
+    }
+    onChange(content);
   };
+
+  const handleSelectMention = (mention) => {
+    const editor = editorRef.current.getEditor();
+
+    const range = editor.getSelection(true);
+    if (range) {
+      editor.insertText(range.index, mention.value, {
+        'bg-blue-100': true,
+      });
+      editor.insertText(range.index + mention.value.length, ' ');
+
+      setShowMentionList(false);
+
+      onChange(editor.root.innerHTML);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        quillContainerRef.current &&
+        !quillContainerRef.current.contains(event.target)
+      ) {
+        setShowMentionList(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      const editor = editorRef.current.getEditor();
+      if (editor && editor.container) {
+        quillContainerRef.current = editor.container;
+      }
+    }
+  }, [editorRef]);
 
   const modules = {
     toolbar: [
@@ -59,20 +124,6 @@ const AppEditor = ({
       ['link', 'image', 'video', 'formula'],
       ['clean'],
     ],
-    mention: {
-      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-      mentionDenotationChars: ['@'],
-      source: function (searchTerm, renderList) {
-        if (searchTerm.length === 0) {
-          renderList(atValues, searchTerm);
-        } else {
-          const matches = atValues.filter((v) =>
-            v.value.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-          renderList(matches, searchTerm);
-        }
-      },
-    },
   };
 
   const formats = [
@@ -104,7 +155,7 @@ const AppEditor = ({
   const editorClassName = toolbarBottom ? 'editor-toolbar-bottom' : '';
 
   return (
-    <div className={`react-quill-editor ${editorClassName}`}>
+    <div className={`react-quill-editor ${editorClassName} relative`}>
       <ReactQuill
         forwardedRef={editorRef}
         theme='snow'
@@ -115,6 +166,28 @@ const AppEditor = ({
         formats={formats}
         placeholder={placeholder}
       />
+      {showMentionList && (
+        <div
+          className='absolute z-10 mt-1 bg-white rounded border border-gray-300 shadow-lg'
+          style={{
+            top: mentionListPosition.top,
+            left: mentionListPosition.left,
+          }}
+        >
+          {filteredMentions.map((mention) => (
+            <div
+              key={mention.id}
+              className='px-4 py-2 cursor-pointer hover:bg-blue-100'
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleSelectMention(mention);
+              }}
+            >
+              {mention.value}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

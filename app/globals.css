@@ -2,43 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.ql-mention-list-container {
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.ql-mention-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ql-mention-list-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-
-.ql-mention-list-item:last-child {
-  border-bottom: none;
-}
-
-.ql-mention-list-item.ql-mention-list-item-selected,
-.ql-mention-list-item:hover {
-  background-color: #f3f3f3;
-}
-
-.ql-editor .mention {
-  background-color: #e6e6e6;
-  color: #333;
-  padding: 2px 4px;
-  border-radius: 4px;
-  margin: 0 2px;
-}
-
 .ql-editor .mention span {
   pointer-events: none;
 }
