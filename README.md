@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# React/Next.js Quill Editor
 
-## Getting Started
+This repository contains a React/Next.js component that integrates the powerful [Quill editor](https://quilljs.com/) with additional mention functionality. It is designed to work with Next.js and uses dynamic imports to ensure client-side rendering.
 
-First, run the development server:
+## Features
+
+- Rich Text Editing: Bold, italic, underline, strikethrough, and blockquotes.
+- Lists: Ordered and bullet lists with indents.
+- Media Embedding: Ability to embed links and videos.
+- Mentioning: Mention functionality for tagging.
+- Customizable: Easy to extend with more Quill modules and formats.
+
+## Installation
+
+Before you can use the editor, you must install it along with its peer dependencies.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install react-quill quill-mention
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+To use the `AppEditor` component in your Next.js application, import it into your component file:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```jsx
+import AppEditor from '@/components/AppEditor';
 
-## Learn More
+// ...
 
-To learn more about Next.js, take a look at the following resources:
+<AppEditor
+  readOnly={false}
+  onChange={handleContentChange}
+  value={yourValue}
+  placeholder='Write something amazing...'
+/>;
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`handleContentChange` is a callback function that receives the new content whenever it changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Customizing Toolbar and Formats
 
-## Deploy on Vercel
+The editor's toolbar and formats can be customized to fit the needs of your application. Modify the `modules` and `formats` arrays in `AppEditor.jsx` to include or exclude specific functionalities.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Mention Functionality
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The mention functionality is asynchronous and can be tailored to fetch data from an external API or other asynchronous sources.
+
+## Contributions
+
+Contributions to this project are welcome. Please fork the repository and submit a pull request with your changes or enhancements.
+
+## License
+
+This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
