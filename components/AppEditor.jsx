@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 'use client';
 
-import React, { useRef } from 'react';
 import dynamic from 'next/dynamic';
+import React, { useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import 'quill-mention';
+// import 'quill-mention';
 
 const loadReactQuill = async () => {
   const { default: RQ } = await import('react-quill');
