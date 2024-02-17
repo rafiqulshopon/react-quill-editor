@@ -42,3 +42,37 @@
 .ql-editor .mention span {
   pointer-events: none;
 }
+
+.ql-editor {
+  min-height: 150px;
+}
+
+.ql-toolbar.ql-snow {
+  background: #f3f4f8;
+}
+
+.react-quill-editor .ql-toolbar.ql-snow {
+  border-bottom: 1px solid #ccc;
+}
+
+.react-quill-editor.editor-toolbar-bottom .ql-toolbar.ql-snow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #ccc;
+  z-index: 10;
+}
+
+.react-quill-editor.editor-toolbar-bottom .ql-container.ql-snow {
+  border-top: 1px solid #ccc;
+  padding-bottom: 42px;
+}
+
+.react-quill-editor {
+  position: relative;
+}
+
+.react-quill-editor .ql-editor {
+  padding-bottom: 42px;
+}
