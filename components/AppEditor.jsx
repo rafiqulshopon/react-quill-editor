@@ -32,7 +32,6 @@ const AppEditor = ({
     left: 0,
   });
   const [filteredMentions, setFilteredMentions] = useState([]);
-  const [cursorIndex, setCursorIndex] = useState(0);
 
   const mentions = [
     { id: 1, value: 'Calvin' },
@@ -59,7 +58,6 @@ const AppEditor = ({
           setShowMentionList(newFilteredMentions.length > 0);
           const bounds = editor.getBounds(cursorPosition);
           setMentionListPosition({ top: bounds.bottom, left: bounds.left });
-          setCursorIndex(cursorPosition);
         } else {
           setShowMentionList(false);
         }
@@ -70,17 +68,13 @@ const AppEditor = ({
 
   const handleSelectMention = (mention) => {
     const editor = editorRef.current.getEditor();
-
     const range = editor.getSelection(true);
     if (range) {
-      editor.insertText(range.index, mention.value, {
-        'bg-blue-100': true,
-      });
-      editor.insertText(range.index + mention.value.length, ' ');
-
+      editor.deleteText(range.index - 1, 1);
+      editor.insertText(range.index - 1, `@${mention.value} `, { bold: true });
+      editor.setSelection(range.index + mention.value.length);
       setShowMentionList(false);
-
-      onChange(editor.root.innerHTML);
+      onChange(editor.getContents());
     }
   };
 
