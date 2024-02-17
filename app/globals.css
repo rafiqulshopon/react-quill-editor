@@ -30,3 +30,15 @@
 .ql-mention-list-item:hover {
   background-color: #f3f3f3;
 }
+
+.ql-editor .mention {
+  background-color: #e6e6e6;
+  color: #333;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+.ql-editor .mention span {
+  pointer-events: none;
+}
