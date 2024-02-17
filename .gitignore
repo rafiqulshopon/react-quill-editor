@@ -2,10 +2,14 @@
 
 # dependencies
 /node_modules
+/.idea
 /.pnp
 .pnp.js
-.yarn/install-state.gz
-
+yarn.lock
+.env
+.env.local
+.next
+package.json
 package-lock.json
 
 # testing

@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.ql-editor .mention span {
-  pointer-events: none;
+.easy-mention {
+  background-color: #d8d8d8;
 }
 
 .ql-editor {

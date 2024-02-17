@@ -149,7 +149,6 @@ const AppEditor = ({
     'align',
     'direction',
     'clean',
-    'mention',
   ];
 
   const editorClassName = toolbarBottom ? 'editor-toolbar-bottom' : '';
