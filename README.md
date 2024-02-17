@@ -15,7 +15,7 @@ This repository contains a React/Next.js component that integrates the powerful 
 Before you can use the editor, you must install it along with its peer dependencies.
 
 ```bash
-npm install react-quill quill-mention
+npm install react-quill
 ```
 
 ## Usage
