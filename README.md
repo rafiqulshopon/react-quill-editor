@@ -48,7 +48,3 @@ The mention functionality is asynchronous and can be tailored to fetch data from
 ## Contributions
 
 Contributions to this project are welcome. Please fork the repository and submit a pull request with your changes or enhancements.
-
-## License
-
-This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
