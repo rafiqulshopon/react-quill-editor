@@ -1,3 +1,5 @@
+'use client';
+
 import AppEditor from '@/components/AppEditor';
 
 export default function Home() {
